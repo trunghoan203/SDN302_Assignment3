@@ -11,9 +11,23 @@ app.use(cors());
 app.use(bodyParser.json());
 
 // Connect to MongoDB
-mongoose.connect(process.env.MONGODB_URI)
-    .then(() => console.log('Connected to MongoDB'))
-    .catch(err => console.error('Could not connect to MongoDB:', err));
+const connectWithRetry = () => {
+    mongoose.connect(process.env.MONGODB_URI, {
+        useNewUrlParser: true,
+        useUnifiedTopology: true,
+        serverSelectionTimeoutMS: 5000,
+        socketTimeoutMS: 45000,
+    })
+        .then(() => console.log('Connected to MongoDB'))
+        .catch(err => {
+            console.error('Could not connect to MongoDB:', err);
+            console.log('Retrying MongoDB connection in 5 seconds...');
+            setTimeout(connectWithRetry, 5000); // Retry connection after 5 seconds
+        });
+};
+
+connectWithRetry();
+
 
 app.get('/info', async (req, res) => {
     try {
