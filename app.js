@@ -5,10 +5,9 @@ const studentRoutes = require('./routes/studentRoutes');
 const { getAllStudents } = require('./models/infoStudent');
 
 const cors = require('cors');
-app.use(cors());
 
 const app = express();
-
+app.use(cors());
 app.use(bodyParser.json());
 
 // Connect to MongoDB
