@@ -3,8 +3,8 @@ const Student = require('../models/studentModel');
 // Create a new student
 exports.createStudent = async (req, res) => {
     try {
-        const { fullName, studentCode, isActive } = req.body;
-        const newStudent = new Student({ fullName, studentCode, isActive });
+        const { name, studentCode, isActive } = req.body;
+        const newStudent = new Student({ name, studentCode, isActive });
         await newStudent.save();
         res.status(201).json({
             success: true,
@@ -12,7 +12,7 @@ exports.createStudent = async (req, res) => {
             data: newStudent
         });
     } catch (error) {
-        res.status(400).json({ success: false, message: error.message });
+        res.status(400).json({ success: false, message: 'Invalid student code format' });
     }
 };
 
@@ -22,7 +22,7 @@ exports.getAllStudents = async (req, res) => {
         const students = await Student.find();
         res.status(200).json({ success: true, data: students });
     } catch (error) {
-        res.status(500).json({ success: false, message: 'Server Error' });
+        res.status(500).json({ success: false, message: 'Something went wrong on the server' });
     }
 };
 
@@ -35,17 +35,17 @@ exports.getStudentById = async (req, res) => {
         }
         res.status(200).json({ success: true, data: student });
     } catch (error) {
-        res.status(500).json({ success: false, message: 'Server Error' });
+        res.status(500).json({ success: false, message: 'Something went wrong on the server' });
     }
 };
 
 // Update a student by ID
 exports.updateStudent = async (req, res) => {
     try {
-        const { fullName, isActive } = req.body;
+        const { name, isActive } = req.body;
         const student = await Student.findByIdAndUpdate(
             req.params.id,
-            { fullName, isActive },
+            { name, isActive },
             { new: true }
         );
         if (!student) {
@@ -57,7 +57,7 @@ exports.updateStudent = async (req, res) => {
             data: student
         });
     } catch (error) {
-        res.status(400).json({ success: false, message: error.message });
+        res.status(400).json({ success: false, message: 'Invalid student code format' });
     }
 };
 
@@ -70,6 +70,6 @@ exports.deleteStudent = async (req, res) => {
         }
         res.status(200).json({ success: true, message: 'Student deleted successfully' });
     } catch (error) {
-        res.status(500).json({ success: false, message: 'Server Error' });
+        res.status(500).json({ success: false, message: 'Something went wrong on the server' });
     }
 };

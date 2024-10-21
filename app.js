@@ -23,6 +23,15 @@ const connectWithRetry = () => {
 
 connectWithRetry();
 
+// app.get('/info', (req, res) => {
+//     res.json({
+//         data: {
+//             fullName: "Cao Trung Hoan",
+//             studentCode: "QE170187"
+//         }
+//     });
+// });
+
 
 app.get('/info', async (req, res) => {
     try {
@@ -30,7 +39,7 @@ app.get('/info', async (req, res) => {
 
         // Filter to return only fullName and studentCode
         const studentInfo = students.map(student => ({
-            fullName: student.fullName,
+            fullName: student.name,
             studentCode: student.studentCode
         }));
 
